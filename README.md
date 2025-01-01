@@ -10,6 +10,23 @@ AquaLab ist eine React-Anwendung, die Aquarium-Wasserwerte aus einer API abruft 
 - **Europäisches Datumsformat**: Das Datum wird im Format `dd.MM.yyyy` angezeigt.
 - **Datenoperationen**: Es gibt eine Möglichkeit, neue Wasserwerte hinzuzufügen und bestehende zu löschen.
 
+Backend-API realisiert mit Django
+
+Features im Detail
+
+    Liniendiagramme: Jedes Diagramm zeigt die Entwicklung eines Wasserwerts über die Zeit. Die X-Achse zeigt das Datum im europäischen Format an (dd.MM.yyyy).
+    Daten hinzufügen: Es gibt ein Formular, mit dem neue Wasserwerte zum System hinzugefügt werden können.
+    Daten löschen: Jeder Eintrag in der Tabelle hat einen Lösch-Button, um den entsprechenden Wasserwert zu entfernen.
+
+Technologien
+
+    React: Frontend-Bibliothek für den Aufbau der Benutzeroberfläche.
+    Axios: Zum Abrufen von Daten aus der API.
+    Chart.js: Für das Erstellen interaktiver Liniendiagramme.
+    Django: Als Framework für Python.
+    RESTFramework: Zum realisieren der API.
+    Bootstrap: Für ein responsives Layout und ansprechende Gestaltung.
+
 ## Screenshots
 ![23231](https://github.com/user-attachments/assets/4e382c1a-5a1e-4d73-b4b7-29ba0450774c)
 
