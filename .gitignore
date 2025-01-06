@@ -1,0 +1,62 @@
+# Python/Django
+
+# Python bytecode
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Django-specific
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+static/
+
+# Environment variables
+.env
+.env.*
+*.env
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Test, coverage and profiling
+nosetests.xml
+coverage.xml
+*.cover
+*.hypothesis/
+*.tox/
+*.nox/
+*.coverage
+*.cache
+*.pytest_cache/
+
+# Node.js (React)
+
+# Node modules
+node_modules/
+
+# Build output
+build/
+dist/
+
+# React-specific
+*.log
+*.env
+
+# IDE settings
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

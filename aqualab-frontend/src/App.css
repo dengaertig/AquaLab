@@ -1,0 +1,114 @@
+
+.App {
+  text-align: center;
+}
+
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+.header {
+  background-color: #343a40 !important; 
+  color: #ffffff1c !important;
+  padding: 1rem !important;
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  flex-wrap: wrap; 
+}
+
+.header img {
+  height: 50px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.header span {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+
+.body-container {
+  display: flex !important;
+  flex: 1 !important;
+  position: relative !important;
+}
+
+
+.sidebar {
+  width: 250px;
+  background-color: #343a40 !important;
+  color: #fff;
+  min-height: 100vh;
+  border-right: 1px solid #444; 
+  position: fixed; 
+  left: 0;
+  top: 0;
+  bottom: 0;
+  transition: transform 0.3s ease; 
+  transform: translateX(0);
+  z-index: 1000;
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%); 
+}
+
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #343a40;
+  z-index: 999; 
+}
+
+
+.main-content {
+  flex-grow: 1 !important;
+  padding: 2rem !important;
+  background-color: #afafaf3d !important; 
+  transition: margin-left 0.3s ease !important;
+}
+
+
+.main-content.collapsed {
+  margin-left: 0;
+}
+
+/* Responsive Anpassungen */
+@media (max-width: 768px) {
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    transform: translateX(-100%); /* Standard: versteckt */
+  }
+
+  .sidebar.visible {
+    transform: translateX(0); /* Sichtbar auf Mobilgeräten */
+  }
+
+  /* Overlay */
+  .sidebar-overlay {
+    display: block;
+  }
+
+  /* Hauptinhalt */
+  .main-content {
+    margin-left: 0; /* Kein Platz für Sidebar auf Mobilgeräten */
+    padding: 1rem;
+  }
+}
+/* Stil für das Logo */
+.logo {
+  height: 30px !important; /* Größe des Logos */
+  width: auto !important; /* Beibehaltung des Seitenverhältnisses */
+}
