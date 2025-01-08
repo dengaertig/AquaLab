@@ -20,7 +20,7 @@ export const SidebarDark = () => {
         </CNavItem>
         <CNavItem href="/">
           <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Analytics{' '}
-          <CBadge color="primary ms-auto">NEW</CBadge>
+          <CBadge color="primary ms-auto">BETA</CBadge>
         </CNavItem>
         <CNavItem href="#">
           <CIcon customClassName="nav-icon" icon={cilLayers} /> Login

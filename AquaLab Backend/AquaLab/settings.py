@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'waterdata',
     'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
