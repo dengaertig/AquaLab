@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../services/AxiosInstance'; // Verwende die zentrale Axios-Instanz
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { format } from 'date-fns'; // Import von date-fns zum Formatieren des Datums
-// Chart.js Registrierung
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+import { Chart as ChartJS, TimeScale, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import 'chartjs-adapter-date-fns';
+import { format } from 'date-fns';
+
+ChartJS.register(
+  TimeScale,
+  LinearScale,
+  CategoryScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const WaterValues = () => {
   const [data, setData] = useState([]);
@@ -22,25 +32,26 @@ const WaterValues = () => {
     nh4: '',
   });
 
-  // useEffect sorgt dafür, dass die API nur einmal bei der ersten Anzeige geladen wird
+  // Daten abrufen
   useEffect(() => {
-    axios
-      .get('http://localhost:8000/api/watervalues/')
+    axiosInstance
+      .get('/api/watervalues/')
       .then((response) => {
         setData(response.data);
-        setLoading(false); // Daten wurden erfolgreich geladen
+        setLoading(false);
       })
       .catch((err) => {
-        setError('Fehler beim Abrufen der Daten!');
-        setLoading(false); // Fehler beim Abrufen der Daten
+        setError('Fehler beim Abrufen der Daten! Bitte überprüfen Sie Ihre Anmeldung.');
+        setLoading(false);
       });
-  }, []); // Leeres Array bedeutet, dass es nur einmal beim Initialisieren ausgeführt wird
+  }, []); // Läuft nur einmal bei der Komponentenerstellung
 
-  // Funktion zum Hinzufügen eines neuen Wasserwerts
+  // Neuen Wasserwert hinzufügen
   const handleAddWaterValue = (e) => {
     e.preventDefault();
-    axios
-      .post('http://localhost:8000/api/watervalues/', newValue)
+
+    axiosInstance
+      .post('/api/watervalues/', newValue)
       .then((response) => {
         setData([...data, response.data]);
         setNewValue({
@@ -53,26 +64,24 @@ const WaterValues = () => {
           potassium: '',
           iron: '',
           nh4: '',
-        }); // Formular zurücksetzen
+        });
       })
       .catch((err) => {
-        setError('Fehler beim Hinzufügen der Daten!');
+        setError('Fehler beim Hinzufügen der Daten! Stellen Sie sicher, dass Sie eingeloggt sind.');
       });
   };
 
-  // Funktion zum Löschen eines Wasserwerts
   const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:8000/api/watervalues/${id}/`)
+    axiosInstance
+      .delete(`/api/watervalues/${id}/`)
       .then(() => {
         setData(data.filter((item) => item.id !== id));
       })
       .catch((err) => {
-        setError('Fehler beim Löschen der Daten!');
+        setError('Fehler beim Löschen der Daten! Möglicherweise keine Berechtigung.');
       });
   };
 
-  // Ladeanzeige
   if (loading) {
     return (
       <div className="text-center">
@@ -83,7 +92,6 @@ const WaterValues = () => {
     );
   }
 
-  // Fehleranzeige
   if (error) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -92,14 +100,12 @@ const WaterValues = () => {
     );
   }
 
-  // Funktion, um die Trendlinie (Mittellinie) zu berechnen
   const calculateTrend = (values) => {
     const sum = values.reduce((acc, val) => acc + val, 0);
     const avg = sum / values.length;
-    return new Array(values.length).fill(avg); // Array mit dem Durchschnittswert für jeden Punkt
+    return new Array(values.length).fill(avg); 
   };
 
-  // Funktion, um die Chart.js-Daten für jeden Wert zu erstellen
   const createChartData = (label, valueData) => {
     const trend = calculateTrend(valueData);
     return {
@@ -290,32 +296,50 @@ const WaterValues = () => {
         </table>
             {/* Anzeige der Diagramme */}
             <div className="row">
-          {['ph', 'kh', 'no3', 'no2', 'po4', 'kalium', 'eisen', 'nh4'].map((key) => {
-            const chartData = createChartData(key, data.map(item => item[key]));
+          {['ph', 'kh', 'no3', 'no2', 'po4', 'potassium', 'iron', 'nh4'].map((key) => {
+            const chartData = {
+              datasets: [
+                {
+                  label: key.toUpperCase(),
+                  data: data.map(item => ({ x: item.date, y: item[key] })), // Daten mit Zeitstempeln
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  tension: 0.4, 
+                },
+              ],
+            };
+
+            const options = {
+              responsive: true,
+              scales: {
+                x: {
+                  type: 'time', 
+                  time: {
+                    unit: 'week', 
+                  },
+                  title: {
+                    display: true,
+                    text: 'Datum',
+                  },
+                },
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: key.toUpperCase(),
+                  },
+                },
+              },
+            };
+
             return (
               <div className="col-md-6 mb-4" key={key}>
                 <h6>{key.toUpperCase()}</h6>
-                <Line
-                data={chartData}
-                options={{
-                  responsive: true,
-                  scales: {
-                    x: {
-                      ticks: {
-                        autoSkip: true,
-                        maxTicksLimit: 30,
-                      },
-                    },
-                    y: {
-                      beginAtZero: true, // Achse startet bei 0
-                    },
-                  },
-                }}
-              />
+                <Line data={chartData} options={options} />
               </div>
-            );
-          })}
-        </div>
+    );
+  })}
+</div>
       </div>
     </div>
   );

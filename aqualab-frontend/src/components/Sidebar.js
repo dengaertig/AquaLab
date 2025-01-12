@@ -1,18 +1,18 @@
-import React from 'react'
+import React from 'react';
 import {
   CBadge,
   CSidebar,
   CSidebarNav,
   CNavItem,
   CNavTitle,
-} from '@coreui/react'
+  CButton,
+} from '@coreui/react';
 import { CIcon } from '@coreui/icons-react';
+import { cilLayers, cilSpeedometer, cilHome, cilExitToApp } from '@coreui/icons';
 
-import { cilLayers, cilSpeedometer, cilHome } from '@coreui/icons'
-
-export const SidebarDark = () => {
+export const SidebarDark = ({ logout }) => {
   return (
-    <CSidebar className="border-end" colorScheme="dark"> 
+    <CSidebar className="border-end" colorScheme="dark">
       <CSidebarNav>
         <CNavTitle>Navigation</CNavTitle>
         <CNavItem href="#">
@@ -25,7 +25,22 @@ export const SidebarDark = () => {
         <CNavItem href="#">
           <CIcon customClassName="nav-icon" icon={cilLayers} /> Login
         </CNavItem>
+
+
+        {/* Kompakter Logout-Button */}
+        <div className="px-3 py-2">
+          <CButton
+            color="danger"
+            variant="outline"
+            size="sm"
+            onClick={logout}
+            className="logout-button"
+          >
+            <CIcon customClassName="me-2" icon={cilExitToApp} />
+            Logout
+          </CButton>
+        </div>
       </CSidebarNav>
     </CSidebar>
-  )
-}
+  );
+};
